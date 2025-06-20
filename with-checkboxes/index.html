@@ -23,6 +23,12 @@
     <button onclick="clearCheckboxes()">Clear All</button>
     <button onclick="saveCheckboxes()">Save Progress</button>
   </div>
+  <div style="margin-top: 20px;">
+  <input id="newTitle" type="text" placeholder="Song Title" size="40">
+  <input id="newURL" type="text" placeholder="YouTube Link" size="40">
+  <button onclick="addNewSong()">Add Song</button>
+  </div>
+  <input type="text" id="searchBar" placeholder="Search songs..." oninput="filterSongs()" style="width:100%; padding:8px; font-size:16px; margin-top:20px;">
   <table>
     <thead>
       <tr>
@@ -174,8 +180,66 @@
     function saveCheckboxes() {
       alert("Progress saved!");
     }
-
+    function addNewSong() {
+      const title = document.getElementById("newTitle").value.trim();
+      const url = document.getElementById("newURL").value.trim();
+      if (title && url) {
+        const newIndex = songs.length;
+        songs.push({ title, url });
+    
+        const tbody = document.getElementById("songTable");
+        const row = document.createElement("tr");
+    
+        const checkboxCell = document.createElement("td");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = false;
+        checkbox.addEventListener("change", () => {
+          const saved = JSON.parse(localStorage.getItem("karaoke-checks") || "{}");
+          saved[newIndex] = checkbox.checked;
+          localStorage.setItem("karaoke-checks", JSON.stringify(saved));
+        });
+        checkboxCell.appendChild(checkbox);
+    
+        const numberCell = document.createElement("td");
+        numberCell.textContent = newIndex + 1;
+    
+        const titleCell = document.createElement("td");
+        titleCell.textContent = title;
+    
+        const linkCell = document.createElement("td");
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.textContent = "YouTube";
+        linkCell.appendChild(link);
+    
+        row.appendChild(checkboxCell);
+        row.appendChild(numberCell);
+        row.appendChild(titleCell);
+        row.appendChild(linkCell);
+    
+        tbody.appendChild(row);
+    
+        // Clear input fields
+        document.getElementById("newTitle").value = "";
+        document.getElementById("newURL").value = "";
+      } else {
+        alert("Please fill in both fields.");
+      }
+    }
+    
     loadTable();
+    function filterSongs() {
+      const query = document.getElementById("searchBar").value.toLowerCase();
+      const rows = document.querySelectorAll("#songTable tr");
+    
+      rows.forEach(row => {
+        const title = row.cells[2].textContent.toLowerCase();
+        row.style.display = title.includes(query) ? "" : "none";
+      });
+    }
+
   </script>
 </body>
 </html>
