@@ -125,8 +125,11 @@
       })
       .then(response => {
         if (response.ok) {
-          form.reset();
-          confirmation.style.display = "block";
+          form.style.display = 'none';
+          confirmation.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = 'https://bb-cb.github.io/Karaoke-list/no-checkboxes/index.html';
+        }, 2000);
         } else {
           alert("Oops! Something went wrong.");
         }
