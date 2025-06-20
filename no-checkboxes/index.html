@@ -133,7 +133,16 @@
       numberCell.textContent = index + 1;
 
       const titleCell = document.createElement("td");
-      titleCell.textContent = song.title;
+      const cleanedTitle = song.title
+        .replace(/\s*\(Karaoke.*?\)/gi, '')
+        .replace(/\s*\|\s*Karaoke Version\s*\|\s*KaraFun/gi, '')
+        .replace(/\s*Karaoke Version/gi, '')
+        .replace(/\s*Karaoke Instrumental/gi, '')
+        .replace(/\s*\|\s*KaraFun/gi, '')
+        .replace(/\s*-\s*clay wood karaoke/gi, '')
+        .replace(/\s*Karaoke Songs With Lyrics.*$/gi, '')
+        .trim();
+      titleCell.textContent = cleanedTitle;
 
       const linkCell = document.createElement("td");
       const link = document.createElement("a");
