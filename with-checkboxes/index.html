@@ -183,7 +183,7 @@
     function addNewSong() {
       const title = document.getElementById("newTitle").value.trim();
       const url = document.getElementById("newURL").value.trim();
-      if (title && url) {
+      if (title) {
         const newIndex = songs.length;
         songs.push({ title, url });
     
@@ -208,11 +208,15 @@
         titleCell.textContent = title;
     
         const linkCell = document.createElement("td");
-        const link = document.createElement("a");
-        link.href = url;
-        link.target = "_blank";
-        link.textContent = "YouTube";
-        linkCell.appendChild(link);
+        if (url) {
+          const link = document.createElement("a");
+          link.href = url;
+          link.target = "_blank";
+          link.textContent = "YouTube";
+          linkCell.appendChild(link);
+        } else {
+          linkCell.textContent = "—";
+        }
     
         row.appendChild(checkboxCell);
         row.appendChild(numberCell);
@@ -225,9 +229,10 @@
         document.getElementById("newTitle").value = "";
         document.getElementById("newURL").value = "";
       } else {
-        alert("Please fill in both fields.");
+        alert("Please enter a song title.");
       }
     }
+
     
     loadTable();
     function filterSongs() {
