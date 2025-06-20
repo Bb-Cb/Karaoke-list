@@ -22,6 +22,7 @@
 <body>
   <h1>Karaoke Song List</h1>
   <a href="https://bb-cb.github.io/Karaoke-list/request/index.html">Request a Song</a>
+  <input type="text" id="searchBar" placeholder="Search songs..." oninput="filterSongs()" style="width:100%; padding:8px; font-size:16px; margin-top:20px;">
   <table>
     <thead>
       <tr>
@@ -148,6 +149,15 @@
 
       tbody.appendChild(row);
     });
+    function filterSongs() {
+      const query = document.getElementById("searchBar").value.toLowerCase();
+      const rows = document.querySelectorAll("#songTable tr");
+    
+      rows.forEach(row => {
+        const title = row.cells[1].textContent.toLowerCase(); // 2nd column = song title
+        row.style.display = title.includes(query) ? "" : "none";
+      });
+    }
   </script>
 </body>
 </html>
