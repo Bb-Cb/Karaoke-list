@@ -1,0 +1,181 @@
+<!-- karaoke_list_with_checkboxes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karaoke Song List (With Checkboxes)</title>
+  <style>
+    body { font-family: sans-serif; max-width: 1000px; margin: 40px auto; padding: 0 1rem; }
+    h1 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    a { text-decoration: none; color: #0645AD; }
+    a:hover { text-decoration: underline; }
+    .controls { margin: 20px 0; text-align: center; }
+    button { margin: 0 5px; padding: 6px 12px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h1>Karaoke Song List</h1>
+  <div class="controls">
+    <button onclick="clearCheckboxes()">Clear All</button>
+    <button onclick="saveCheckboxes()">Save Progress</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>✓</th>
+        <th>#</th>
+        <th>Song Title</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody id="songTable">
+      <!-- SONG ROWS INSERTED HERE -->
+    </tbody>
+
+  <script>
+    const songs = [
+      { title: "The Greatest Showman - Rewrite The Stars (Karaoke Version)", url: "https://www.youtube.com/watch?v=mayU6Gqpg9Y" },
+      { title: "Mark Ambor - Belong Together (Karaoke Version)", url: "https://www.youtube.com/watch?v=CLkRrDolEDM" },
+      { title: "Adele - Someone Like You (Karaoke Version)", url: "https://www.youtube.com/watch?v=_uORhCSX2f8" },
+      { title: "Adele - Hello (Karaoke Version)", url: "https://www.youtube.com/watch?v=FTVvjIExtAU" },
+      { title: "Adele - Set Fire To The Rain (Karaoke Version)", url: "https://www.youtube.com/watch?v=Z0klfsQ-7R8" },
+      { title: "Adele - Skyfall (Karaoke Version)", url: "https://www.youtube.com/watch?v=UadrtR56n6s" },
+      { title: "Adele - Easy On Me (Karaoke Version)", url: "https://www.youtube.com/watch?v=RZmva8uquiQ" },
+      { title: "Frozen - Let It Go (Idina Menzel) (Karaoke Version)", url: "https://www.youtube.com/watch?v=ifCAfAzOBJM" },
+      { title: "Celine Dion - My Heart Will Go On (Karaoke Version)", url: "https://www.youtube.com/watch?v=cdgU8YmD3Kc" },
+      { title: "John Legend - All of Me (Karaoke With Backing Vocals)", url: "https://www.youtube.com/watch?v=kr8wPkdHFA0" },
+      { title: "Elvis Presley - Can't Help Falling In Love (Karaoke Version)", url: "https://www.youtube.com/watch?v=gd4mB-zUcO8" },
+      { title: "Christina Perri - A Thousand Years (Karaoke With Backing Vocals)", url: "https://www.youtube.com/watch?v=j1V33b2ZEIo" },
+      { title: "Lewis Capaldi - Someone You Loved (Karaoke Version)", url: "https://www.youtube.com/watch?v=0H3KpRuwBZ8" },
+      { title: "Jessie J - Flashlight (Karaoke Version)", url: "https://www.youtube.com/watch?v=pdheWX4oO1A" },
+      { title: "Ed Sheeran - Perfect (Karaoke Version)", url: "https://www.youtube.com/watch?v=sPMA1tqWuf4" },
+      { title: "Auli'i Cravalho - How Far I'll Go (Karaoke Version)", url: "https://www.youtube.com/watch?v=a5LOjg1EiAk" },
+      { title: "Queen - Bohemian Rhapsody (Karaoke Version)", url: "https://www.youtube.com/watch?v=9Lxm0iSnKNc" },
+      { title: "Ed Sheeran - Photograph (Karaoke Version)", url: "https://www.youtube.com/watch?v=XpXe2mXmhp0" },
+      { title: "David Guetta ft. Sia - Titanium (Karaoke Version)", url: "https://www.youtube.com/watch?v=32LB2DR_JM0" },
+      { title: "Meghan Trainor ft. John Legend - Like I'm Gonna Lose You (Karaoke Version)", url: "https://www.youtube.com/watch?v=mawPX4US1l4" },
+      { title: "ABBA - Dancing Queen (Karaoke Version)", url: "https://www.youtube.com/watch?v=WHayJZ3eMcE" },
+      { title: "Justin Bieber ft. Ludacris - Baby (Karaoke Version)", url: "https://www.youtube.com/watch?v=1a5SWpp9Wfg" },
+      { title: "Sia - Snowman (Karaoke Version)", url: "https://www.youtube.com/watch?v=WWu83Z4pqss" },
+      { title: "Let Her Go  - Passenger (Karaoke Version)", url: "https://www.youtube.com/watch?v=Ug_OM0WzVmA" },
+      { title: "Anna Kendrick - Cups (Pitch Perfect's 'When I'm Gone') (Karaoke Version)", url: "https://www.youtube.com/watch?v=mNL7iE-CxXA" },
+      { title: "Backstreet Boys - I Want It That Way (Karaoke Version)", url: "https://www.youtube.com/watch?v=NxilU56kPu0" },
+      { title: "Green Day - Boulevard Of Broken Dreams (Karaoke Version)", url: "https://www.youtube.com/watch?v=r8BdFXaYE8s" },
+      { title: "CaptainSparklez - Revenge (Minecraft Parody) (Karaoke Version)", url: "https://www.youtube.com/watch?v=PvkXaU9SuNs" },
+      { title: "Smash Mouth - All Star (Karaoke Version)", url: "https://www.youtube.com/watch?v=ABOYo7ioQJo" },
+      { title: "ONE OK ROCK - Tropical Therapy (Karaoke Instrumental)", url: "https://www.youtube.com/watch?v=t64IVbzgynA" },
+      { title: "ONE OK ROCK - This Can't Be Us (Karaoke Instrumental)", url: "https://www.youtube.com/watch?v=lkcOCHshphk" },
+      { title: "Wild Robot - Kiss the Sky KARAOKE", url: "https://www.youtube.com/watch?v=sJE0hVCv14Q" },
+      { title: "Maren Morris - Even When I'm Not (The Wild Robot) - clay wood karaoke", url: "https://www.youtube.com/watch?v=ga4H_V_K_bw" },
+      { title: "Count On Me - Bruno Mars (Karaoke Songs With Lyrics - Original Key)", url: "https://www.youtube.com/watch?v=DC3LY7K7WOI" },
+      { title: "Sara Bareilles - Brave (Karaoke Version)", url: "https://www.youtube.com/watch?v=n86DI8GbzB4" },
+      { title: "Rachel Platten - Fight Song (Karaoke Version)", url: "https://www.youtube.com/watch?v=G0JiiGgbi_k" },
+      { title: "Taylor Swift - Shake It Off (Karaoke Version)", url: "https://www.youtube.com/watch?v=-i5MU14JLdw" },
+      { title: "Katy Perry - Firework (Karaoke Version)", url: "https://www.youtube.com/watch?v=KUKyy4r-BO4" },
+      { title: "One Direction - What Makes You Beautiful (Karaoke Version)", url: "https://www.youtube.com/watch?v=SLrJwiLsa9A" },
+      { title: "Shakira - Try Everything (Karaoke Version)", url: "https://www.youtube.com/watch?v=HJXW27K79T4" },
+      { title: "Can't Stop the Feeling - Trolls (Justin Timberlake) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=qtyFNZLaWBY" },
+      { title: "American Authors - Best Day Of My Life (Karaoke Version)", url: "https://www.youtube.com/watch?v=a6JskTwyQ3s" },
+      { title: "Imagine Dragons - On Top Of The World (Karaoke Version)", url: "https://www.youtube.com/watch?v=Rvo_tZPcC1A" },
+      { title: "One Direction - Story Of My Life (Karaoke Version)", url: "https://www.youtube.com/watch?v=LTj11cPudyw" },
+      { title: "One Direction - Night Changes (Karaoke Version)", url: "https://www.youtube.com/watch?v=kH9_meN7WqQ" },
+      { title: "Jason Mraz - I'm Yours (Karaoke Version)", url: "https://www.youtube.com/watch?v=kn8YiDSYcq4" },
+      { title: "Vance Joy - Riptide (Karaoke Version)", url: "https://www.youtube.com/watch?v=XWq1hK6XtjU" },
+      { title: "The Greatest Showman - This Is Me (Karaoke Version)", url: "https://www.youtube.com/watch?v=V59psMbygfI" },
+      { title: "Life is a Highway - Cars (Rascal Flatts) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=z_MZKLRGVzs" },
+      { title: "Owl City - Fireflies (Karaoke Version)", url: "https://www.youtube.com/watch?v=gfVKv3NEAQ4" },
+      { title: "B RNS - Electric Love (Karaoke Version)", url: "https://www.youtube.com/watch?v=9520UyI0KsE" },
+      { title: "Ruth B - Dandelions (Karaoke Version)", url: "https://www.youtube.com/watch?v=UjejKDLIrRk" },
+      { title: "Bastille - Pompeii (Karaoke Version)", url: "https://www.youtube.com/watch?v=Z7VYEhapHgw" },
+      { title: "Sheppard - Geronimo (Karaoke)", url: "https://www.youtube.com/watch?v=qiW5_4NU4os" },
+      { title: "I'm a Believer - Smash Mouth (Shrek film) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=0SCkJ9b-cuE" },
+      { title: "Ben E. King - Stand By Me (Karaoke Version)", url: "https://www.youtube.com/watch?v=OU3699R53rs" },
+      { title: "You've Got a Friend in Me - Toy Story (Randy Newman) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=agSKYf1qmPg" },
+      { title: "Journey - Don't Stop Believin' (Karaoke Version)", url: "https://www.youtube.com/watch?v=c8wn2fMYvns" },
+      { title: "I Just Can't Wait to Be King - The Lion King (1994 film) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=LFXCgHs-jxo" },
+      { title: "I'll Make a Man Out of You - Mulan (Donny Osmond) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=q4S2kAJ1JA8" },
+      { title: "A Whole New World - Aladdin (1992 film) (Lea Salonga & Brad Kane) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=x3maZRvhlHI" },
+      { title: "Do You Want to Build a Snowman - Frozen (2013 film) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=B19-jwaWESU" },
+      { title: "Dwayne Johnson - You're Welcome (from 'Moana') (Karaoke Version)", url: "https://www.youtube.com/watch?v=tIYURcd4WB4" },
+      { title: "When Will My Life Begin - Tangled (Mandy Moore) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=qlncGYpXY_Q" },
+      { title: "For the First Time in Forever - Frozen | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=rbzq26S7lUY" },
+      { title: "MKTO - Classic (Karaoke Version)", url: "https://www.youtube.com/watch?v=nWR9KwCCdok" },
+      { title: "Owl City - Good Time (Karaoke Version)", url: "https://www.youtube.com/watch?v=_W3uKctm9v0" },
+      { title: "Carly Rae Jepsen - Call Me Maybe (Karaoke Version)", url: "https://www.youtube.com/watch?v=qG520Uw8lUA" },
+      { title: "Avicii - Wake Me Up (Karaoke Version)", url: "https://www.youtube.com/watch?v=BGfJobjH4Dc" },
+      { title: "Gym Class Heroes ft. Adam Levine - Stereo Hearts (Karaoke Version)", url: "https://www.youtube.com/watch?v=C8lCwQsE2Oc" },
+      { title: "Safe And Sound - Capital Cities | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=TSY0Pe1Rtug" },
+      { title: "Nicky Youre, dazy - Sunroof (Karaoke Version)", url: "https://www.youtube.com/watch?v=Xr4bbASQs4I" },
+      { title: "Post Malone, Swae Lee - Sunflower (Karaoke Version)", url: "https://www.youtube.com/watch?v=awxvtj-0JKw" },
+      { title: "OneRepublic - Counting Stars (Karaoke Version)", url: "https://www.youtube.com/watch?v=3EG3CfTv4lQ" },
+      { title: "Christina Perri - A Thousand Years (Karaoke Version)", url: "https://www.youtube.com/watch?v=85zr83teaug" },
+      { title: "Vanessa Carlton - A Thousand Miles (Karaoke Version)", url: "https://www.youtube.com/watch?v=u2K-525UPUA" },
+      { title: "I Want It That Way - Backstreet Boys | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=IjFeGYAT-5E" },
+      { title: "Shotgun - George Ezra | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=1zVnVF33xRA" },
+      { title: "Paradise - Coldplay | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=9isd_KIvCWQ" },
+      { title: "Yellow - Coldplay | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=xeEegnhKsbw" },
+      { title: "Somewhere Only We Know - Keane | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=Ruu4PfY3pp4" },
+      { title: "Lovely - Billie Eilish & Khalid | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=lTJARjHyg1o" },
+      { title: "Put Your Head on My Shoulder - Paul Anka | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=D8qVNLWrSSQ" },
+      { title: "Lemon Tree - Fool's Garden | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=NMUFavYTN1o" },
+      { title: "I'm Still Standing - Sing (Taron Egerton) | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=xOfXc3sqZjI" },
+      { title: "Can't Take My Eyes Off You - Frankie Valli & The Four Seasons | Karaoke Version | KaraFun", url: "https://www.youtube.com/watch?v=zf2V3HG6YgU" },
+      { title: "Grover Washington Jr ft. Bill Withers - Just The Two Of Us (Karaoke Version)", url: "https://www.youtube.com/watch?v=yIyW2lcapHs" },
+      { title: "Frank Sinatra - Fly Me To The Moon (Karaoke Version)", url: "https://www.youtube.com/watch?v=VvjWl7lvrnk" }
+        ];
+
+    function loadTable() {
+      const saved = JSON.parse(localStorage.getItem("karaoke-checks") || "{}");
+      const tbody = document.getElementById("songTable");
+      songs.forEach((song, index) => {
+        const row = document.createElement("tr");
+
+        const checkboxCell = document.createElement("td");
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = !!saved[index];
+        checkbox.addEventListener("change", () => {
+          saved[index] = checkbox.checked;
+          localStorage.setItem("karaoke-checks", JSON.stringify(saved));
+        });
+        checkboxCell.appendChild(checkbox);
+
+        const numberCell = document.createElement("td");
+        numberCell.textContent = index + 1;
+
+        const titleCell = document.createElement("td");
+        titleCell.textContent = song.title;
+
+        const linkCell = document.createElement("td");
+        const link = document.createElement("a");
+        link.href = song.url;
+        link.target = "_blank";
+        link.textContent = "YouTube";
+        linkCell.appendChild(link);
+
+        row.appendChild(checkboxCell);
+        row.appendChild(numberCell);
+        row.appendChild(titleCell);
+        row.appendChild(linkCell);
+
+        tbody.appendChild(row);
+      });
+    }
+
+    function clearCheckboxes() {
+      localStorage.removeItem("karaoke-checks");
+      location.reload();
+    }
+
+    function saveCheckboxes() {
+      alert("Progress saved!");
+    }
+
+    loadTable();
+  </script>
+</body>
+</html>
