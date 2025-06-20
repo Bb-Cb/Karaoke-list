@@ -10,12 +10,18 @@
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
     th { background-color: #f2f2f2; }
-    a { text-decoration: none; color: #0645AD; }
+    a {
+      text-decoration: none;
+      color: #0645AD;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
     a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <h1>Karaoke Song List</h1>
+  <a href="request/">Request a Song</a>
   <table>
     <thead>
       <tr>
@@ -132,6 +138,7 @@
       const link = document.createElement("a");
       link.href = song.url;
       link.target = "_blank";
+      link.rel = "noopener noreferrer";
       link.textContent = "YouTube";
       linkCell.appendChild(link);
 
@@ -143,5 +150,4 @@
     });
   </script>
 </body>
-  <p><a href="request.html">Submit a Song Request</a></p>
 </html>
