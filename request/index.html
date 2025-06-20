@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Song Request</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    input, label { display: block; width: 100%; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Request a Karaoke Song</h1>
+  <form action="https://formspree.io/f/your_form_id" method="POST">
+    <label for="song">Song Title:</label>
+    <input type="text" name="song" required>
+
+    <label for="artist">Artist:</label>
+    <input type="text" name="artist" required>
+
+    <input type="submit" value="Request Song">
+  </form>
+</body>
+</html>
