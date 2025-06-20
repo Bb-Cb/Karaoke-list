@@ -113,11 +113,11 @@
   <script>
     const form = document.getElementById("requestForm");
     const confirmation = document.getElementById("confirmation");
-
+  
     form.addEventListener("submit", function(event) {
       event.preventDefault();
       const formData = new FormData(form);
-
+  
       fetch(form.action, {
         method: form.method,
         body: formData,
@@ -126,10 +126,13 @@
       .then(response => {
         if (response.ok) {
           form.style.display = 'none';
+          confirmation.innerHTML = "✓ Submitted! <br><br><a href='https://bb-cb.github.io/Karaoke-list/no-checkboxes/index.html'>Return to Song List</a>";
           confirmation.style.display = 'block';
+  
+          // Try redirect after 2 seconds
           setTimeout(() => {
             window.location.href = 'https://bb-cb.github.io/Karaoke-list/no-checkboxes/index.html';
-        }, 2000);
+          }, 2000);
         } else {
           alert("Oops! Something went wrong.");
         }
