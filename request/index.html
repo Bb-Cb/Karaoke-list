@@ -1,21 +1,85 @@
-<form id="requestForm" action="https://formspree.io/f/xqabdeko" method="POST">
-  <label for="name">Name:</label><br/>
-  <input type="text" id="name" name="name" required /><br/>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2rem;
+    max-width: 600px;
+    margin: auto;
+    background: #f9f9f9;
+  }
 
-  <label for="song">Song Name & Artist:</label><br/>
-  <input type="text" id="song" name="song" required /><br/>
+  h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  button[type="submit"] {
+    margin-top: 1.5rem;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button[type="submit"]:hover {
+    background: #45a049;
+  }
+
+  #confirmation {
+    display: none;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #28a745;
+    margin-top: 2rem;
+  }
+</style>
+
+<h1>Request a Karaoke Song</h1>
+
+<form id="requestForm" action="https://formspree.io/f/xqabdeko" method="POST">
+  <label for="song">Song:</label>
+  <input type="text" id="song" name="song" required />
+
+  <label for="artist">Artist:</label>
+  <input type="text" id="artist" name="artist" required />
 
   <button type="submit">Submit Request</button>
 </form>
 
-<div id="confirmation" style="display:none; font-size: 2rem; color: green; margin-top: 1em;">&#10003; Submitted!</div>
+<div id="confirmation">&#10003; Submitted!</div>
 
 <script>
   const form = document.getElementById('requestForm');
   const confirmation = document.getElementById('confirmation');
 
   form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // prevent normal submission
+    e.preventDefault();
 
     const formData = new FormData(form);
     try {
@@ -28,12 +92,10 @@
       });
 
       if (response.ok) {
-        form.style.display = 'none';       // hide form
-        confirmation.style.display = 'block';  // show tick
-
-        // Redirect back after 2 seconds
+        form.style.display = 'none';
+        confirmation.style.display = 'block';
         setTimeout(() => {
-          window.location.href = 'https://bb-cb.github.io/Karaoke-list/no-checkboxes/index.html'; 
+          window.location.href = 'https://bb-cb.github.io/Karaoke-list/no-checkboxes/index.html';
         }, 2000);
       } else {
         alert('Oops! There was a problem submitting your form.');
